@@ -1,0 +1,26 @@
+{
+    "name": "webpack-extract-bundle-text",
+    "version": "0.1.0",
+    "description": "Extracts text from webpack bundle into an additional asset",
+    "engines": {
+        "node": ">=6"
+    },
+    "dependencies": {
+        "webpack-sources": "^0.1.4"
+    },
+    "peerDependencies": {
+        "webpack": "^2.2.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/maryo/webpack-extract-bundle-text.git"
+    },
+    "keywords": [
+        "webpack",
+        "extract",
+        "bundle",
+        "text"
+    ],
+    "author": "Marek Štípek <mario.dweller@seznam.cz>",
+    "license": "MIT"
+}
