@@ -37,3 +37,21 @@ new ExtractTextPlugin({
     outputFile: 'index.html',
 })
 ```
+
+Or the options can also be an array
+
+```js
+new ExtractTextPlugin(['index.html', '404.html'])
+```
+
+```js
+new ExtractTextPlugin([
+    {
+        inputFile: 'index.html.js',
+        outputFile: 'index.html',
+    }, {
+        inputFile: '404.html.js',
+        outputFile: '404.html',
+    },
+])
+```

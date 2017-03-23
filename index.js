@@ -5,7 +5,15 @@ class ExtractBundleTextPlugin
 {
     constructor(options)
     {
-        this.options = typeof options === 'string' ? {chunkName: options, outputFile: options} : options;
+        if (!Array.isArray(options)) {
+            options = [options];
+        }
+
+        this.options = options.map((value) => {
+            return typeof value === 'string' || value instanceof String
+                ? {chunkName: value, outputFile: value}
+                : value;
+        });
     }
 
     apply(compiler)
@@ -15,10 +23,22 @@ class ExtractBundleTextPlugin
 
     extract(compilation, callback)
     {
-        const script = new vm.Script(this.compile(compilation), {displayErrors: true});
+        this.options.forEach((options) => {
+            this.extractFile(
+                compilation,
+                options.inputFile || compilation.namedChunks[options.chunkName].files[0],
+                options.outputFile,
+                callback
+            );
+        });
+    }
+
+    extractFile(compilation, inputFile, outputFile, callback)
+    {
+        const script = new vm.Script(this.compile(compilation, inputFile), {displayErrors: true});
         const sandbox = {
             extractBundleTextPluginCallback: (module) => {
-                compilation.assets[this.options.outputFile] = new RawSource(module.exports.toString());
+                compilation.assets[outputFile] = new RawSource(module.exports.toString());
                 callback();
             }
         };
@@ -26,9 +46,8 @@ class ExtractBundleTextPlugin
         script.runInNewContext(sandbox);
     }
 
-    compile(compilation)
+    compile(compilation, inputFile)
     {
-        const inputFile = this.options.inputFile || compilation.namedChunks[this.options.chunkName].files[0];
         const manifestFile = compilation.namedChunks.manifest.files[0];
         let source = compilation.assets[manifestFile].source().replace(
             'modules[moduleId].call',
