@@ -27,19 +27,18 @@ class ExtractBundleTextPlugin
             this.extractFile(
                 compilation,
                 options.inputFile || compilation.namedChunks[options.chunkName].files[0],
-                options.outputFile,
-                callback
+                options.outputFile
             );
         });
+        callback();
     }
 
-    extractFile(compilation, inputFile, outputFile, callback)
+    extractFile(compilation, inputFile, outputFile)
     {
         const script = new vm.Script(this.compile(compilation, inputFile), {displayErrors: true});
         const sandbox = {
             extractBundleTextPluginCallback: (module) => {
                 compilation.assets[outputFile] = new RawSource(module.exports.toString());
-                callback();
             }
         };
         sandbox.window = sandbox;

@@ -1,6 +1,6 @@
 {
     "name": "webpack-extract-bundle-text",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Extracts text from webpack bundle into an additional asset",
     "engines": {
         "node": ">=6"
